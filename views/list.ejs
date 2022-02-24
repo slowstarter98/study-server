@@ -48,16 +48,78 @@
         </ul>
       </div>
     </nav>
-    <h2>홈입니다.</h2>
+
+    
+    <!-- EJS 는 html을 더 쓰기 쉽게 도와주는 탬플릿 엔진? , 전처리 엔진
+    터미널에서 ejs 설치 -->
+    <!-- posts.length == 자바스크립트 문법 배열(데이터)의 길이를 알려준다. -->
+    <!-- 서버에서 가져온 할일 리스트  -->
+    <!-- class="m1-2 my-3" 는 부스트랩 문법 그냥 css 골라서 쓰는 거 -->
+    <h4 class="ml-2 my-3">서버에서 가져온 할 일</h4>
+    <ul class="list-group">
+      
+      <% for(var i=0; i<posts.length ; i++ ){ %>
+
+        <li class="list-group-item" >
+          <P>글번호 : <%= posts[i]._id %> </P>
+          <h4>할 일 제목 : <%= posts[i].제목 %></h4>
+          <p>할 일 마감날짜 : <%= posts[i].시간 %></p>
+          <!-- id를 숨기는 기능 data-id -->
+          <button class="delete" data-id="<%= posts[i]._id %>">삭제</button>
+          
+        </li>
+
+       <%}%> 
+
+    </ul>
+
+<!-- jQurey 임포트 하는 스크립트 문 -->
+    <script
+    src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"
+  >
+</script>
+
+<script>
+
+//  $.ajax == ajax 요청을 가능하게 하는 구문
+// 정확히는 jQuery 라이브러리를 이용해서 선언하는 부분
+// jQuery 라이브러리 설치 필요
+// 매개변수에 object 들어감
+
+// 의미 = 새로고침 없이 '/delete'에 DELETE 요청을 할거다 ,data 담아서
+// 앞으로 복붙해서 쓰자
+
+// jQurey 문법 
+// 뜻 class가 delete인걸 누른다면 실행해주세요
+$('.delete').click(function(e){
+  // 가장중요한 문법  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+  // e.target == 누른 요소
+  // .dataset.id == 거기 숨겨진 data-id 를 가져와 줘
+  var 글번호=e.target.dataset.id;
+  $.ajax({
+    method: 'DELETE',
+    url : '/delete',
+    //삭제할 데이터의 번호를 보낸다
+    // x번 버튼을 누르면 x번 게시물이 삭제되어야 한다.
+    data : {_id : 글번호 }
+  })
+  // 요청이 성공했을때 요걸 실행해주세요~
+  .done(function(결과){
+    //페이지를 새로고침해야 반영된다.
+    //또는 삭제버튼을 누른 <li>요소를 안보이게 / 제거해주세요 
+  });
+
+})
+
+
+</script>
+
+
+
 
     <!-- Optional JavaScript; choose one of the two! -->
 
     <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
-    <script
-      src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
-      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-      crossorigin="anonymous"
-    ></script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
